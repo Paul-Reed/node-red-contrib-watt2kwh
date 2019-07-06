@@ -18,7 +18,16 @@ module.exports = function(RED) {
         RED.nodes.createNode(this,config);
 	this.maximum = config.maximum;
         var node = this;
+        node.on('input', function(msg) {
 
+	var time = Math.round((new Date()).getTime());
+	var watts = msg.payload;
+	var context = this.context();
+	var lastms = context.get('lastms')||0;
+	var interval = time - lastms;
+
+         if (this.maximum) {
+            // Convert the 'maximum' value to milliseconds (based on the selected time unit)
             switch(config.maximumunit) {
                 case "secs":
                     this.maximum *= 1000;
@@ -31,16 +40,7 @@ module.exports = function(RED) {
                     break;
                 default: // "msecs" so no conversion needed
             }
-
-
-        node.on('input', function(msg) {
-
-	var time = Math.round((new Date()).getTime());
-	var watts = msg.payload;
-	var context = this.context();
-	var lastms = context.get('lastms')||0;
-	var interval = time - lastms;
-
+        }
 
 	// Check if input msg is a number, else warn & exit
 	if (isNaN (watts)){
@@ -50,16 +50,14 @@ module.exports = function(RED) {
 
 	context.set('lastms',time);
 
-// this.error("Maximum is"+this.maximum);
+this.error("Maximum is"+this.maximum);
 
         // Calculate power from energy
         if (interval < this.maximum) {
             msg.payload = (interval*watts)/3600000;
-        } else {
-		msg.payload = null;
-	}
+        }
 
-	node.send(msg);
+//	node.send(msg);
 
         });
     }
