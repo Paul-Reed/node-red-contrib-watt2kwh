@@ -19,6 +19,23 @@ module.exports = function(RED) {
 	this.maximum = config.maximum;
         var node = this;
 
+            switch(config.format) {
+		case 'j': // Joules
+                   this.output=1;
+                    break;
+                case 'wh': // watthours
+                   this.output=3600;
+                    break;
+                case 'kwh': // kilowatthours
+                   this.output=(3600*1000);
+                    break;
+                case 'mwh': // megawatthours
+                    this.output=(1000*1000*3600);
+                    break;
+                default:
+                    // TODO
+            }
+
             switch(config.maximumunit) {
                 case "secs":
                     this.maximum *= 1000;
@@ -37,8 +54,7 @@ module.exports = function(RED) {
 
 	var time = Math.round((new Date()).getTime());
 	var watts = msg.payload;
-	var context = this.context();
-	var lastms = context.get('lastms')||0;
+	var lastms = node.lastms||0;
 	var interval = time - lastms;
 
 
@@ -48,20 +64,20 @@ module.exports = function(RED) {
 		return;
 		}
 
-	context.set('lastms',time);
+	node.lastms = time;
 
-// this.error("Maximum is"+this.maximum);
+//this.error("output multiplier = "+this.output);
+//this.error("maximum = "+this.maximum);
+//this.error("interval = "+interval);
 
-        // Calculate power from energy
+        // Calculate joules from energy - if interval is OK
         if (interval < this.maximum) {
-            msg.payload = (interval*watts)/3600000;
+            msg.payload = ((interval*watts)/1000)/this.output;
+            node.send(msg);
         } else {
-		msg.payload = null;
-	}
-
-	node.send(msg);
-
-        });
+		return;
+               }
+         });
     }
   RED.nodes.registerType("watt2kwh",Watt2kWhNode);
 }
