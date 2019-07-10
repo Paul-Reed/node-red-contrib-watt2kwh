@@ -1,7 +1,7 @@
 {
   "name": "node-red-contrib-watt2kwh",
-  "version": "0.0.1",
-  "description": "A node-RED node that converts a power feed (Watts) to energy (kWh).",
+  "version": "0.1.0",
+  "description": "A node-RED node that converts a power feed (watts) to energy (kWh).",
   "main": "none",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,7 +11,7 @@
     "url": "https://github.com/Paul-Reed/node-red-contrib-watt2kwh.git"
   },
   "license": "Apache-2.0",
-  "keywords": [ "watt", "kwh", "power", "energy" ],
+  "keywords": [ "node-red", "watt", "kwh", "power", "energy" ],
   "node-red"  : {
     "nodes"   : {
      "simpletime": "watt2kwh.js"

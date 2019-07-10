@@ -48,21 +48,35 @@
  </script>
 
 <script type="text/x-red" data-help-name="watt2kwh">
-<p><strong>node-red-contrib-watt2kwh</strong> node can be used to convert power to energy, and a typical usage is to convert Watts to kWh.</p>
-<h3>Inputs</h3>
+<h2 id="noderedcontribwatt2kwh">node-red-contrib-watt2kwh</h2>
+
+<p>A node specifically written to convert power (watts) to energy (kWh).</p>
+
+<h3 id="inputs">Inputs</h3>
+
 <p>The node accepts a msg.payload input in the format of a number (example 6) or a string (example "6") provided that the string only contains numbers.</p>
-<h3>Outputs</h3>
+
+<h3 id="outputs">Outputs</h3>
+
 <p>The msg.payload contains the energy output, which can be set in the node config to be;</p>
+
 <ul>
 <li>Joules</li>
-<li>Watt/hour</li>
-<li>Kilowatt/hour or</li>
-<li>Megawatt/hour</li>
+
+<li>Watt hour</li>
+
+<li>Kilowatt hour or</li>
+
+<li>Megawatt hour</li>
 </ul>
-<h3>Details</h3>
-<p>As the calculation is dependent upon the the amount of power used or generated, <strong>and</strong> the interval between two points in time;&nbsp;<strong>interval*power = energy</strong> the very first value fed into the node will not produce an output, because the node requires a second value to be able to calculate the interval between the two values.</p>
-<p>After subsequent feed inputs, the node will output the corresponding energy used or generated within that period.</p>
-<p>A common usage is to create a barchart, to show daily energy usage or generation. Using the watt/hour setting, the msg.payload can be fed into the database, for example influx, and then queried within Grafana to produce the barchart;&nbsp; <code>SELECT sum("energyfeed") FROM "yourdatabase" WHERE $timeFilter GROUP BY time(1d)</code></p>
-<p>The other common usage is to use the data within node-RED.</p>
-<p>TO BE CONTINUED...</p>
+
+<h3 id="details">Details</h3>
+
+<p>As the calculation is dependent upon the relationship between the amount of power used, (or generated) <strong>and</strong> the interval between consecutive data points; <strong>interval x power = energy</strong> the very first value fed into the node will not produce an output, because the node requires a second value to be able to calculate the interval between the two values. </p>
+
+<p>After subsequent feed inputs, the node will output the corresponding energy used or generated within that interval.  </p>
+
+<p>The Timeout setting in the node's configuration, should be set to at least the maximum interval between successive readings. This is to avoid the situation where for example, a sensor is taken off line, develops a fault or there is a communication problem, resulting in a break of several hours between readings and the calculation - <strong>interval x power = energy</strong> would then be inaccurate.</p>
+
+<p>For example flows - see the <a href="https://github.com/Paul-Reed/node-red-contrib-watt2kwh/">README</a></p>
 </script>
