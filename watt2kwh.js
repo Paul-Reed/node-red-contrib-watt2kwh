@@ -21,38 +21,15 @@ module.exports = function(RED) {
         RED.nodes.createNode(this,config);
 	this.maximum = config.maximum;
         var node = this;
-            switch(config.format) {
-		case 'j': // joule
-                   this.output=1e-3;
-                    break;
-                case 'kj': // kilojoule
-                   this.output=1;
-                    break;
-                case 'wh': // watthours
-                   this.output=3.6;
-                    break;
-                case 'kwh': // kilowatt-hour
-                   this.output=3600;
-                    break;
-                case 'mwh': // megawatt-hour
-                    this.output=(1e3*3600);
-                    break;
-                default:
-            }
 
-            switch(config.maximumunit) {
-                case "secs":
-                    this.maximum *= 1;
-                    break;
-                case "mins":
-                    this.maximum *= 60;
-                    break;
-                case "hours":
-                    this.maximum *= 3600;
-                    break;
-                default:
-            }
-		// Overule if left blank or negative values selected
+	//Read the selected output format
+	const formats = {"j":1e-3, "kj": 1, "wh": 3.6, "kwh": 3600, "mwh": (1e3*3600)};
+	this.output = formats[config.format] || 0;
+
+	//Read the selected timeout value
+	const units = {"secs": 1, "mins": 60, "hours": 3600};
+	this.maximum *= units[config.maximumunit] || 0;
+	// Overule if left blank or negative values selected
 		if (this.maximum <= 0) {
 		   this.maximum = 3600;
 		   }
