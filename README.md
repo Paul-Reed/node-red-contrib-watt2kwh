@@ -1,11 +1,19 @@
-**node-red-contrib-watt2kwh** node is specifically written to convert power (watts) to energy (kWh).
+## node-red-contrib-watt2kwh
+A node specifically written to convert power (watts) to energy (kWh).
 ### Inputs
 The node accepts a msg.payload input in the format of a number (example 6) or a string (example "6") provided that the string only contains numbers.
 ### Outputs
-The msg.payload contains the energy output, which can be set in the node config to be; * Joules * Watt hour * Kilowatt hour or * Megawatt hour
+The msg.payload contains the energy output, which can be set in the node config to be;
+* Joules
+* Watt hour
+* Kilowatt hour or
+* Megawatt hour
 ### Details
-As the calculation is dependent upon the relationship between the amount of power used, (or generated) **and** the interval between consecutive data points; **interval x power = energy** the very first value fed into the node will not produce an output, because the node requires a second value to be able to calculate the interval between the two values. After subsequent feed inputs, the node will output the corresponding energy used or generated within that interval. 
+As the calculation is dependent upon the relationship between the amount of power used, (or generated) **and** the interval between consecutive data points; **interval x power = energy** the very first value fed into the node will not produce an output, because the node requires a second value to be able to calculate the interval between the two values.  
+After subsequent feed inputs, the node will output the corresponding energy used or generated within that interval.  
+
 The Timeout setting in the node's configuration, should be set to at least the maximum interval between successive readings. This is to avoid the situation where for example, a sensor is taken off line, develops a fault or there is a communication problem, resulting in a break of several hours between readings and the calculation - **interval x power = energy** would then be inaccurate.  
+
 A common usage is to create a barchart, to show daily energy usage or generation. Using the watt/hour setting, the msg.payload can be fed into the database, for example influx, and then queried within Grafana to produce the barchart; `SELECT sum("energyfeed") FROM "yourdatabase" WHERE $timeFilter GROUP BY time(1d)`
 ``` 
 [{"id":"d62baedc.ded46","type":"debug","z":"31e18edc.98bdc2","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","x":740,"y":440,"wires":[]},{"id":"74280b50.f704a4","type":"inject","z":"31e18edc.98bdc2","name":"1 kW feed","topic":"","payload":"1000","payloadType":"str","repeat":"60","crontab":"","once":false,"onceDelay":0.1,"x":420,"y":440,"wires":[["5eb66b22.1a4de4"]]},{"id":"5eb66b22.1a4de4","type":"watt2kwh","z":"31e18edc.98bdc2","format":"kwh","maximum":"5","maximumunit":"mins","name":"","x":580,"y":440,"wires":[["d62baedc.ded46"]]}] 
