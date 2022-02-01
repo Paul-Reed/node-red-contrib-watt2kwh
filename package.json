@@ -13,8 +13,8 @@
   "license": "Apache-2.0",
   "keywords": [ "node-red", "watt", "kwh", "power", "energy" ],
   "node-red"  : {
+    "version": ">=2.0.0",
     "nodes"   : {
-     "version": ">=2.0.0",
      "simpletime": "watt2kwh.js"
     }
   },
