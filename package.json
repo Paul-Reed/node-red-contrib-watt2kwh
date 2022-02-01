@@ -14,8 +14,12 @@
   "keywords": [ "node-red", "watt", "kwh", "power", "energy" ],
   "node-red"  : {
     "nodes"   : {
+     "version": ">=2.0.0",
      "simpletime": "watt2kwh.js"
     }
+  },
+   "engines": {
+   "node": ">=12.0.0"
   },
   "author": "Paul Reed",
   "bugs": {
