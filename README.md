@@ -3,7 +3,7 @@ A node specifically written to convert power (watts) to energy (kWh).
 ### Inputs
 The node accepts a msg.payload input in the format of a number (example 6) or a string (example "6") provided that the string only contains numbers.
 ### Outputs
-The msg.payload contains the energy output, which can be set in the node config to be;
+The msg.payload contains the energy output, which can be set in the node config to be either;
 * Joules
 * Watt hour
 * Kilowatt hour or
